@@ -2,9 +2,9 @@
 |                            FILE DESCRIPTION                           |
 -----------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
-  - File name     : example_eeprom.h
+  - File name     : example_exti.c
   - Author        : zeweni
-  - Update date   : 2020.07.26                 
+  - Update date   : 2020.07.23
   -	Copyright(C)  : 2020-2021 zeweni. All rights reserved.
 -----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
@@ -29,30 +29,54 @@
 /*-----------------------------------------------------------------------
 |                               INCLUDES                                |
 -----------------------------------------------------------------------*/
-#ifndef __EXAMPLE_EEPROM_H_
-#define __EXAMPLE_EEPROM_H_
+#include "example_exti.h"
+#include "ELL_LIB.h"
+#include "stdio.h"
+/*-----------------------------------------------------------------------
+|                                 DATA                                  |
+-----------------------------------------------------------------------*/
+
+#define EXAMPLE_CTRL     (0)
 
 /*-----------------------------------------------------------------------
-|                             API FUNCTION                              |
+|                               FUNCTION                                |
 -----------------------------------------------------------------------*/
 
 /**
- * @brief      EEPROMÂ§ñËÆæÁ§∫‰æã‰ª£Á†ÅÂàùÂßãÂåñ„ÄÇ
- * @details    Example code for ADC peripherals initialized.
+ * @brief      Õ‚≤ø÷–∂œÕ‚…Ë æ¿˝¥˙¬Î≥ı ºªØ°£
+ * @details    External interrupt peripheral sample code initialization.
  * @param      None.
  * @return     None.
+ * @note       √ø÷÷¿˝≥Ã£¨÷ªƒ‹µ˜”√“ª∏ˆ≥ı ºªØ∫Ø ˝∫Õ‘À––∫Ø ˝£¨∏˜¿˝≥Ã÷Æº‰≤¢≤ªºÊ»›°£
+ *             Each routine can only call an initialization function and a run function, 
+ *             and the routines are not compatible with each other.
 **/
-extern void Example_EEPROM_Init(void);
+void Example_EXTI_Init(void)
+{
+	GPIO_MODE_IN_FLOATING(GPIO_P3,Pin_3);
+   
+	NVIC_EXTI0_Init(EXTI_Tri_Falling,NVIC_PR0,ENABLE);
+}
 
-/**
- * @brief      ËøêË°åEEPROMÂ§ñËÆæÁ§∫‰æã‰ª£Á†Å„ÄÇ
- * @details    Run the EEPROM peripheral sample code.
- * @param      None.
- * @return     None.
-**/
-extern void Example_EEPROM_Run(void);
+#if EXAMPLE_CTRL
+
+	/**
+	 * @brief      Õ‚≤ø0÷–∂œ∑˛ŒÒ∫Ø ˝°£
+	 * @details    External 0 interrupt service function.
+	 * @param      None.
+	 * @return     None.
+	**/
+	void EXTI0_ISRQ_Handler(void)
+	{
+		static uint16_t cnt = 0;
+		UART1_Isr_Send_Byte(cnt++);
+	}
 
 #endif
+
 /*-----------------------------------------------------------------------
 |                   END OF FLIE.  (C) COPYRIGHT zeweni                  |
 -----------------------------------------------------------------------*/
+
+
+

@@ -2,9 +2,9 @@
 |                            FILE DESCRIPTION                           |
 -----------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
-  - File name     : example_eeprom.h
+  - File name     : example_pca.h
   - Author        : zeweni
-  - Update date   : 2020.07.26                 
+  - Update date   : 2020.07.31                
   -	Copyright(C)  : 2020-2021 zeweni. All rights reserved.
 -----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
@@ -29,28 +29,24 @@
 /*-----------------------------------------------------------------------
 |                               INCLUDES                                |
 -----------------------------------------------------------------------*/
-#ifndef __EXAMPLE_EEPROM_H_
-#define __EXAMPLE_EEPROM_H_
+#ifndef __EXAMPLE_PCA_H_
+#define __EXAMPLE_PCA_H_
 
 /*-----------------------------------------------------------------------
 |                             API FUNCTION                              |
 -----------------------------------------------------------------------*/
 
-/**
- * @brief      EEPROM外设示例代码初始化。
- * @details    Example code for ADC peripherals initialized.
- * @param      None.
- * @return     None.
-**/
-extern void Example_EEPROM_Init(void);
 
 /**
- * @brief      运行EEPROM外设示例代码。
- * @details    Run the EEPROM peripheral sample code.
+ * @brief      PAC外设作为PWM示例代码初始化。
+ * @details    The PAC peripheral is initialized as the PWM sample code.
  * @param      None.
  * @return     None.
+ * @note       每种例程，只能调用一个初始化函数和运行函数，各例程之间并不兼容。
+ *             Each routine can only call an initialization function and a run function, 
+ *             and the routines are not compatible with each other.
 **/
-extern void Example_EEPROM_Run(void);
+extern void Example_PCA_To_PWM_Init(void);
 
 #endif
 /*-----------------------------------------------------------------------

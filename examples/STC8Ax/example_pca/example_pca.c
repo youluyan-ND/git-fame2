@@ -2,9 +2,9 @@
 |                            FILE DESCRIPTION                           |
 -----------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
-  - File name     : example_adc.c
+  - File name     : example_pca.c
   - Author        : zeweni
-  - Update date   : 2020.07.23
+  - Update date   : 2020.07.31
   -	Copyright(C)  : 2020-2021 zeweni. All rights reserved.
 -----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
@@ -29,74 +29,75 @@
 /*-----------------------------------------------------------------------
 |                               INCLUDES                                |
 -----------------------------------------------------------------------*/
-#include "example_adc.h"
+#include "example_pca.h"
 #include "ELL_LIB.h"
-#include "stdio.h"
+
 /*-----------------------------------------------------------------------
 |                                 DATA                                  |
 -----------------------------------------------------------------------*/
-/* None. */
+
+#define EXAMPLE_CTRL     (0)
+
 /*-----------------------------------------------------------------------
 |                               FUNCTION                                |
 -----------------------------------------------------------------------*/
 
 /**
- * @brief      ADC外设示例代码初始化。
- * @details    Example code for ADC peripherals initialized.
+ * @brief      PAC外设作为PWM示例代码初始化。
+ * @details    The PAC peripheral is initialized as the PWM sample code.
  * @param      None.
  * @return     None.
  * @note       每种例程，只能调用一个初始化函数和运行函数，各例程之间并不兼容。
  *             Each routine can only call an initialization function and a run function, 
  *             and the routines are not compatible with each other.
 **/
-void Example_ADC_Init(void)
+void Example_PCA_To_PWM_Init(void)
 {
-	ADC_InitType ADC_InitStruct = {0};
+   TIMER_InitType TIMER_InitStruct={0};
+  /**
+     * PCA至PWM频率：
+     * 如果系统时钟频率== 24Mhz，
+     * 配置PCA时钟源= Timer0溢出脉冲，
+     * 配置定时器0 = 19 us
+     * 配置PCA位= 10位
+     * 因此时钟源的pca = 52.6KHZ
+     * 因此，PCA至PWM频率= 52.6 / 1024 Hz = 51Hz
+    **/
 
-	ADC_InitStruct.Power = ENABLE; // ADC power control bit
-	ADC_InitStruct.Channel = ADC_Channel_P04_8Ax; // ADC channel selection
-	ADC_InitStruct.Speed = 0X0F; // The maximum ADC conversion speed (working clock frequency) is 0x0f
-	ADC_InitStruct.Align = ADC_Right; // ADC data format alignment
-	ADC_InitStruct.Run = ENABLE; //  ADC conversion operation control bit
-	ADC_Init(&ADC_InitStruct);		
-	
+    /*
+     * PCA to PWM frequency:
+     * If system clock frequency == 24Mhz,
+     * to configure PCA clock source = Timer0 overflow pulse,
+     * to configure timer0 = 19 us
+     * to configure PCA  bits = 10 bits
+     * so pca of clock source = 52.6KHZ
+     * so, PCA to PWM frequency = 52.6 / 1024 Hz = 51Hz
+     */
+	TIMER_InitStruct.Mode = TIMER_16BitAutoReload;
+	TIMER_InitStruct.Time = 19;     //19us
+	TIMER_InitStruct.Run = ENABLE;
+	TIMER0_Init(&TIMER_InitStruct);
+    
+    /**
+     * 配置占空比：
+     * 配置PCA位= 10位
+     * 值= 0x200
+     * 因此，占空比=（0x400-0x200）/ 0x400 = 50％
+    **/
+
+    /*
+     * duty:
+     * to configure PCA  bits = 10 bits
+     * to  value = 0x200
+     * so, duty = (0x400 - 0x200) / 0x400 = 50%
+     */
+     PCA3_PWM_Init(PCA_PWM_10Bits,0x200);
+     PCA_CNT_Init(PCA_TIMER0,ENABLE);
 }
 
 
-/**
- * @brief      运行ADC外设示例代码。
- * @details    Run the ADC peripheral sample code.
- * @param      None.
- * @return     None.
- * @note       每种例程，只能调用一个初始化函数和运行函数，各例程之间并不兼容。
- *             Each routine can only call an initialization function and a run function, 
- *             and the routines are not compatible with each other.
-**/
-void Example_ADC_Run(void)
-{
-	uint16_t ret;
-	
-	ret = ADC_Get_Sample(ADC_Channel_P04_8Ax,ADC_Acc_12Bits);
-	
-	UART1_Isr_Send_Byte(0xFF);
-	UART1_Isr_Send_Byte(ret);
-	UART1_Isr_Send_Byte(ret>>8);
-	
-	DELAY_Set_Ms(500);
-}
 
-/**
-  * @name    STC8x_Exti_Config
-  * @brief   MCU Exti initialization function
-  * @param   None
-  * @return  None
-***/
-static void STC8x_Exti_Config(void)
-{
-	GPIO_MODE_IN_FLOATING(GPIO_P3,Pin_3);
-   
-	NVIC_EXTI0_Init(EXTI_Tri_Falling,NVIC_PR0,ENABLE);
-}
+
 
 /*-----------------------------------------------------------------------
 |                   END OF FLIE.  (C) COPYRIGHT zeweni                  |

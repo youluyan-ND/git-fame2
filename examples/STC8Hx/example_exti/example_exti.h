@@ -2,9 +2,9 @@
 |                            FILE DESCRIPTION                           |
 -----------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
-  - File name     : example_eeprom.h
+  - File name     : example_exti.h
   - Author        : zeweni
-  - Update date   : 2020.07.26                 
+  - Update date   : 2020.07.23                 
   -	Copyright(C)  : 2020-2021 zeweni. All rights reserved.
 -----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
@@ -29,28 +29,20 @@
 /*-----------------------------------------------------------------------
 |                               INCLUDES                                |
 -----------------------------------------------------------------------*/
-#ifndef __EXAMPLE_EEPROM_H_
-#define __EXAMPLE_EEPROM_H_
+#ifndef __EXAMPLE_EXTI_H_
+#define __EXAMPLE_EXTI_H_
 
 /*-----------------------------------------------------------------------
 |                             API FUNCTION                              |
 -----------------------------------------------------------------------*/
 
 /**
- * @brief      EEPROMÂ§ñËÆæÁ§∫‰æã‰ª£Á†ÅÂàùÂßãÂåñ„ÄÇ
+ * @brief      ADCÕ‚…Ë æ¿˝¥˙¬Î≥ı ºªØ°£
  * @details    Example code for ADC peripherals initialized.
  * @param      None.
  * @return     None.
 **/
-extern void Example_EEPROM_Init(void);
-
-/**
- * @brief      ËøêË°åEEPROMÂ§ñËÆæÁ§∫‰æã‰ª£Á†Å„ÄÇ
- * @details    Run the EEPROM peripheral sample code.
- * @param      None.
- * @return     None.
-**/
-extern void Example_EEPROM_Run(void);
+void Example_EXTI_Init(void);
 
 #endif
 /*-----------------------------------------------------------------------
