@@ -2,9 +2,9 @@
 |                            FILE DESCRIPTION                           |
 -----------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
-  - File name     : STC8x_WDT.h
+  - File name     : STC8x_DELAY.c
   - Author        : zeweni
-  - Update date   : 2020.02.06
+  - Update date   : 2020.07.23                
   -	Copyright(C)  : 2020-2021 zeweni. All rights reserved.
 -----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
@@ -29,8 +29,8 @@
 /*-----------------------------------------------------------------------
 |                               INCLUDES                                |
 -----------------------------------------------------------------------*/
-#ifndef __STC8x_WDT_H_
-#define __STC8x_WDT_H_
+#ifndef __STC8x_DELAY_H_
+#define __STC8x_DELAY_H_
 
 /*--------------------------------------------------------
 | @Description: ELL library core                         |
@@ -41,104 +41,66 @@
 | @Description: STC8x MCU Register                       |
 --------------------------------------------------------*/
 
-#if    (PER_LIB_MCU_MUODEL == STC8Ax)
+#if   (PER_LIB_MCU_MUODEL == STC8Ax)
     #include "STC8Ax_REG.h"  
-#elif  (PER_LIB_MCU_MUODEL == STC8Cx)
+#elif (PER_LIB_MCU_MUODEL == STC8Cx)
     #include "STC8Cx_REG.h"
-#elif  (PER_LIB_MCU_MUODEL == STC8Fx)
+#elif (PER_LIB_MCU_MUODEL == STC8Fx)
     #include "STC8Fx_REG.h"
-#elif  (PER_LIB_MCU_MUODEL == STC8Gx)
+#elif (PER_LIB_MCU_MUODEL == STC8Gx)
     #include "STC8Gx_REG.h"
-#elif  (PER_LIB_MCU_MUODEL == STC8Hx)
+#elif (PER_LIB_MCU_MUODEL == STC8Hx)
     #include "STC8Hx_REG.h"
 #endif
-
 
 /*-----------------------------------------------------------------------
 |                                 DATA                                  |
 -----------------------------------------------------------------------*/
 
-#ifndef PER_LIB_MCU_MUODEL   
-    /** 如果没有定义这个宏，默认为STC8Ax。
-        If the mirco is undefined，select to STC8Ax */
-    #define PER_LIB_MCU_MUODEL STC8Ax
-#endif
+/**
+ * @brief      这是一个非常关键的宏，主要用于实现延时时间的精度。
+ *             默认是11000UL，你可以在这个基础上进行微调。
+ *             建议使用一个IO翻转，用延时函数延时，通过示波器抓波形进行校准。
+ * @details    This is a very critical macro, mainly used to achieve the accuracy of the delay time.
+ *             The default is 11000UL, you can make fine adjustments on this basis.
+ *             It is recommended to use an IO flip, delay with a delay function in the middle, 
+ *             and use an oscilloscope to capture the waveform for calibration.
+**/   
+#define   DELAY_COUNT         PER_LIB_PREDELAY_BASE
 
-
-#ifndef PER_LIB_RST_CTRL
-    /** 如果没有定义这个宏，默认为1。
-        If the mirco is undefined，select to "1" */
-    #define PER_LIB_RST_CTRL 1
-#endif
-
-
-#ifndef PER_LIB_RST_INIT_CTRL
-    /** 如果没有定义这个宏，默认为1。
-        If the mirco is undefined，select to "1" */
-    #define PER_LIB_RST_INIT_CTRL 1
-#endif
-
-
-#ifndef PER_LIB_RST_WORK_CTRL
-    /** 如果没有定义这个宏，默认为1。
-        If the mirco is undefined，select to "1" */
-    #define PER_LIB_RST_WORK_CTRL 1
-#endif
-
-
-/*--------------------------------------------------------
-| @Description: WDT clock ferquency division define      |
---------------------------------------------------------*/
-
-#define      WDTCLK_DIV2    0x00
-#define      WDTCLK_DIV4    0x01
-#define      WDTCLK_DIV8    0x02
-#define     WDTCLK_DIV16    0x03
-#define     WDTCLK_DIV32    0x04
-#define     WDTCLK_DIV64    0x05
-#define    WDTCLK_DIV128    0x06
-#define    WDTCLK_DIV256    0x07
 
 /*-----------------------------------------------------------------------
 |                             API FUNCTION                              |
 -----------------------------------------------------------------------*/
+#if (PER_LIB_PREDELAY_CTRL == 1)
 
-#if (PER_LIB_RST_CTRL == 1)
+    /**
+     * @brief      精准延时组件初始化。
+     * @details    Precisely delay component initialization.  
+     * @param      None.
+     * @return     FSC_SUCCESS 返回成功。Return to success.
+     * @return     FSC_FAIL    返回失败。Return to fail.
+    **/
+    FSCSTATE DELAY_Init(void);
 
-	#if (PER_LIB_RST_INIT_CTRL == 1)
-	
-		/**
-		 * @brief       看门狗初始函数。
-		 * @details     WDT initialization function. 
-		 * @param[in]   cLKDiv   系统时钟分频数。clock division.
-		 * @param[in]   run      运行控制位。Run control bit.
-		 * @return      FSC_SUCCESS 返回成功。Return to success.
-		 * @return      FSC_FAIL    返回失败。Return to fail.
-		**/
-		FSCSTATE WDT_Init(uint8_t clKDiv,BOOL run);
-	
-	#endif
-	
-	#if (PER_LIB_RST_WORK_CTRL == 1)
+    /**
+     * @brief      上电延时，帮助系统稳定。
+     * @details    Power-on delay helps to stabilize the system.
+     * @param      None.
+     * @return     None.
+    **/
+    void DELAY_Set_Pos(void); 
 
-		/**
-		 * @brief   获取喂狗时间函数，以便定时喂狗。
-		 * @details Get WDT  feeding time function.
-		 * @param   None.
-		 * @return  [uint32_t] 获取喂狗时间，单位us。Get the feeding time, the unit is us.
-		**/
-		uint32_t Get_WDT_Time(void);
+ 
+    /**
+     * @brief      延时一段时间，ms级别。
+     * @details    Delay for a period of time, ms level.  
+     * @param[in]  nms 延时时间.Delay time.
+     * @return     None.
+    **/   
+	void DELAY_Set_Ms(uint16_t nms);
 
 
-		/**
-		 * @brief    喂狗宏函数，如果不定时喂狗，系统将会复位。
-		 * @details  Feeding the dog macro function, 
-		 *           if the dog is not fed regularly, the system will reset.
-		**/
-		#define   WDT_FEED()   do{WDT_CONTR |= 0x10;}while(0)
-
-	#endif
-		
 #endif
 /*-----------------------------------------------------------------------
 |                   END OF FLIE.  (C) COPYRIGHT zeweni                  |

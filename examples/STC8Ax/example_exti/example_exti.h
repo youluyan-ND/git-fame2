@@ -2,9 +2,9 @@
 |                            FILE DESCRIPTION                           |
 -----------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
-  - File name     : ELL_LIB.h
+  - File name     : example_exti.h
   - Author        : zeweni
-  - Update date   : 2020.05.03                  
+  - Update date   : 2020.07.23                 
   -	Copyright(C)  : 2020-2021 zeweni. All rights reserved.
 -----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
@@ -21,7 +21,7 @@
  * 8051 ELL low-layer libraries is distributed in the hope that it will 
  * be useful,but WITHOUT ANY WARRANTY; without even the implied warranty 
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
- * Apache-2.0 License License for more details.
+ * Apache-2.0 License for more details.
 
  * You should have received a copy of the Apache-2.0 License.8051 ELL 
  * low-layer libraries. If not, see <http://www.apache.org/licenses/>.
@@ -29,25 +29,22 @@
 /*-----------------------------------------------------------------------
 |                               INCLUDES                                |
 -----------------------------------------------------------------------*/
-#ifndef __ELL_Lib_H_
-#define __ELL_Lib_H_
+#ifndef __EXAMPLE_EXTI_H_
+#define __EXAMPLE_EXTI_H_
 
-/*--------------------------------------------------------
-| @Description: STC8x Peripheral config                  |
---------------------------------------------------------*/
-#include "PerList.h"
+/*-----------------------------------------------------------------------
+|                             API FUNCTION                              |
+-----------------------------------------------------------------------*/
 
-/*--------------------------------------------------------
-| @Description: C libs include                           |
---------------------------------------------------------*/
-
-#include "stdio.h"
-#include "stdlib.h"
-
+/**
+ * @brief      ADC外设示例代码初始化。
+ * @details    Example code for ADC peripherals initialized.
+ * @param      None.
+ * @return     None.
+**/
+void Example_EXTI_Init(void);
 
 #endif
 /*-----------------------------------------------------------------------
 |                   END OF FLIE.  (C) COPYRIGHT zeweni                  |
 -----------------------------------------------------------------------*/
-
-

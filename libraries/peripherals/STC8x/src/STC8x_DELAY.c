@@ -2,9 +2,9 @@
 |                            FILE DESCRIPTION                           |
 -----------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
-  - File name     : main.c
+  - File name     : STC8x_DELAY.c
   - Author        : zeweni
-  - Update date   : 2020.01.11
+  - Update date   : 2020.07.23                
   -	Copyright(C)  : 2020-2021 zeweni. All rights reserved.
 -----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
@@ -29,38 +29,68 @@
 /*-----------------------------------------------------------------------
 |                               INCLUDES                                |
 -----------------------------------------------------------------------*/
-#include "main.h"
-#include "example_adc.h"
+#include "STC8x_DELAY.h"
 /*-----------------------------------------------------------------------
 |                                 DATA                                  |
 -----------------------------------------------------------------------*/
-
+static uint16_t G_MS_Count = 0;
 /*-----------------------------------------------------------------------
 |                               FUNCTION                                |
 -----------------------------------------------------------------------*/
-/**
-  * @name    main
-  * @brief   main program
-  * @param   None
-  * @return  None
-***/
-int main(void)
-{
-	STC8x_System_Init();
-	Example_ADC_Init();
-	
-	for(;;)
-	{
-		Example_ADC_Run();
-	}
+#if (PER_LIB_PREDELAY_CTRL == 1)
 
-}
+    /**
+     * @brief      精准延时组件初始化。
+     * @details    Precisely delay component initialization.  
+     * @param      None.
+     * @return     FSC_SUCCESS 返回成功。Return to success.
+     * @return     FSC_FAIL    返回失败。Return to fail.
+    **/
+    FSCSTATE DELAY_Init(void)
+    {
+        extern uint32_t Get_SysClk_FRE(void);
+        uint32_t sysClk_FRE;
+        /* Get system clock frequency */
+        sysClk_FRE = Get_SysClk_FRE();
+        G_MS_Count = sysClk_FRE / DELAY_COUNT;
+        return FSC_SUCCESS;
+    }
 
 
+    /**
+     * @brief      上电延时，帮助系统稳定。
+     * @details    Power-on delay helps to stabilize the system.
+     * @param      None.
+     * @return     None.
+    **/
+    void DELAY_Set_Pos(void) 
+    {
+        uint16_t i = 10000;
+        for(; i > 0; i--);
+    }
 
+
+    /**
+     * @brief      延时一段时间，ms级别。
+     * @details    Delay for a period of time, ms level.  
+     * @param[in]  nms 延时时间.Delay time.
+     * @return     None.
+    **/
+    void DELAY_Set_Ms(uint16_t nms)
+    {
+        uint16_t i;
+        for(; nms>0; nms--)
+        {			
+            i = G_MS_Count;
+            while(--i);
+        }
+    }
+
+#endif
 /*-----------------------------------------------------------------------
 |                   END OF FLIE.  (C) COPYRIGHT zeweni                  |
 -----------------------------------------------------------------------*/
+
 
 
 
