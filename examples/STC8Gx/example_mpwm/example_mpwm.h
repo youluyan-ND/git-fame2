@@ -2,16 +2,15 @@
 |                            FILE DESCRIPTION                           |
 -----------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
-  - File name     : main.c
-  - Author        : zeweni
-  - Update date   : 2020.01.11
-  -	Copyright(C)  : 2020-2021 zeweni. All rights reserved.
+  - File name     : example_mpwm.h
+  - Author        : slipperstree
+  - Update date   : 2022.07.03
 -----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
 |                            COPYRIGHT NOTICE                            |
 ------------------------------------------------------------------------*/
 /*
- * Copyright (C) 2021, zeweni (17870070675@163.com)
+ * Copyright (C) 2022, slipperstree (https://gitee.com/slipperstree)
 
  * This file is part of 8051 ELL low-layer libraries.
 
@@ -21,7 +20,7 @@
  * 8051 ELL low-layer libraries is distributed in the hope that it will 
  * be useful,but WITHOUT ANY WARRANTY; without even the implied warranty 
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
- * Apache-2.0 License License for more details.
+ * Apache-2.0 License for more details.
 
  * You should have received a copy of the Apache-2.0 License.8051 ELL 
  * low-layer libraries. If not, see <http://www.apache.org/licenses/>.
@@ -29,39 +28,30 @@
 /*-----------------------------------------------------------------------
 |                               INCLUDES                                |
 -----------------------------------------------------------------------*/
-#include "main.h"
-#include "example_mpwm.h"
+#ifndef __EXAMPLE_MPWM_H_
+#define __EXAMPLE_MPWM_H_
 
 /*-----------------------------------------------------------------------
-|                                 DATA                                  |
------------------------------------------------------------------------*/
-
-/*-----------------------------------------------------------------------
-|                               FUNCTION                                |
+|                             API FUNCTION                              |
 -----------------------------------------------------------------------*/
 
 /**
-  * @name    main
-  * @brief   main program
-  * @param   None
-  * @return  None
-***/
-int main(void)
-{
-    STC8x_System_Init();
-    Example_MPWM_Init();
+ * @brief      MPWM外设示例代码初始化。
+ * @details    Example code for MPWM peripherals initialized.
+ * @param      None.
+ * @return     None.
+**/
+void Example_MPWM_Init(void);
 
-    for(;;)
-    {
-      Example_MPWM_Run();
-    }
+/**
+ * @brief      运行MPWM外设示例代码。
+ * @details    Run the MPWM peripheral sample code.
+ * @param      None.
+ * @return     None.
+**/
+void Example_MPWM_Run(void);
 
-}
-
-
+#endif
 /*-----------------------------------------------------------------------
-|                   END OF FLIE.  (C) COPYRIGHT zeweni                  |
+|                   END OF FLIE.  (C) COPYRIGHT slipperstree            |
 -----------------------------------------------------------------------*/
-
-
-
