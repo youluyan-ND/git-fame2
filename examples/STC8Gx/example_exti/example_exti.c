@@ -2,9 +2,9 @@
 |                            FILE DESCRIPTION                           |
 -----------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
-  - File name     : STC12x_REG.h
+  - File name     : example_exti.c
   - Author        : zeweni
-  - Update date   : 2020.02.06                  
+  - Update date   : 2020.07.23
   -	Copyright(C)  : 2020-2021 zeweni. All rights reserved.
 -----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
@@ -21,7 +21,7 @@
  * 8051 ELL low-layer libraries is distributed in the hope that it will 
  * be useful,but WITHOUT ANY WARRANTY; without even the implied warranty 
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
- * Apache-2.0 License License for more details.
+ * Apache-2.0 License for more details.
 
  * You should have received a copy of the Apache-2.0 License.8051 ELL 
  * low-layer libraries. If not, see <http://www.apache.org/licenses/>.
@@ -29,18 +29,54 @@
 /*-----------------------------------------------------------------------
 |                               INCLUDES                                |
 -----------------------------------------------------------------------*/
-#ifndef __STC12x_REG_H_
-#define __STC12x_REG_H_
-
-#include "STC8x_TYPE.h"
-
+#include "example_exti.h"
+#include "ELL_LIB.h"
+#include "stdio.h"
 /*-----------------------------------------------------------------------
-|                                REGISTER                               |
+|                                 DATA                                  |
 -----------------------------------------------------------------------*/
 
+#define EXAMPLE_CTRL     (0)
 
+/*-----------------------------------------------------------------------
+|                               FUNCTION                                |
+-----------------------------------------------------------------------*/
+
+/**
+ * @brief      外部中断外设示例代码初始化。
+ * @details    External interrupt peripheral sample code initialization.
+ * @param      None.
+ * @return     None.
+ * @note       每种例程，只能调用一个初始化函数和运行函数，各例程之间并不兼容。
+ *             Each routine can only call an initialization function and a run function, 
+ *             and the routines are not compatible with each other.
+**/
+void Example_EXTI_Init(void)
+{
+	GPIO_MODE_IN_FLOATING(GPIO_P3,Pin_3);
+   
+	NVIC_EXTI0_Init(EXTI_Tri_Falling,NVIC_PR0,ENABLE);
+}
+
+#if EXAMPLE_CTRL
+
+	/**
+	 * @brief      外部0中断服务函数。
+	 * @details    External 0 interrupt service function.
+	 * @param      None.
+	 * @return     None.
+	**/
+	void EXTI0_ISRQ_Handler(void)
+	{
+		static uint16_t cnt = 0;
+		UART1_Isr_Send_Byte(cnt++);
+	}
 
 #endif
+
 /*-----------------------------------------------------------------------
-|          END OF FLIE        (C) COPYRIGHT Gevico Electronics          | 
+|                   END OF FLIE.  (C) COPYRIGHT zeweni                  |
 -----------------------------------------------------------------------*/
+
+
+
